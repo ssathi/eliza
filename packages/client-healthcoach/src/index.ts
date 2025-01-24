@@ -6,9 +6,9 @@ export const HealthcoachClientInterface: Client = {
     async start(runtime: IAgentRuntime) {
         elizaLogger.warn("Health Coach started");
 
-        // const searchSchedular = new SearchTweetsSchedular(runtime);
+         const searchSchedular = new SearchTweetsSchedular(runtime);
 
-        // searchSchedular.start();
+         searchSchedular.start();
 
 
         const postTweetSchedular = new PostTweetsSchedular(runtime);

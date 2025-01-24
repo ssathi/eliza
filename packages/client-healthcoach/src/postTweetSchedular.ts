@@ -31,8 +31,8 @@ export class PostTweetsSchedular {
         elizaLogger.info("Engaging with search terms");
         try {
 
-
-            const message: Memory = {
+            // GENERATE_TWEET
+            const message1: Memory = {
                 content: {
                     action: 'GENERATE_TWEET',
                     text: 'topics'
@@ -42,32 +42,15 @@ export class PostTweetsSchedular {
                 roomId: null,
             }
 
+            let generatedTweet = '';
             const callback: HandlerCallback = async (response: Content) => {
-                const message: Memory = {
-                    content: {
-                        action: 'POST_TWEET',
-                        text: response.generatedTweet as string
-                    },
-                    userId: null,
-                    agentId: null,
-                    roomId: null,
-                }
-
-                await this.runtime.processActions(
-                    message,
-                    [message],
-                    null,
-                    callback,
-                );
-
-                elizaLogger.info('POST_TWEET Action called')
-
+                generatedTweet = response.generatedTweet as string
                 return [];
             };
 
             await this.runtime.processActions(
-                message,
-                [message],
+                message1,
+                [message1],
                 null,
                 callback,
             );
@@ -75,6 +58,26 @@ export class PostTweetsSchedular {
             elizaLogger.info('GENERATE_TWEET Action called')
 
 
+            // POST_TWEET
+
+            const message2: Memory = {
+                content: {
+                    action: 'POST_TWEET',
+                    text: generatedTweet
+                },
+                userId: null,
+                agentId: null,
+                roomId: null,
+            }
+
+            await this.runtime.processActions(
+                message2,
+                [message2],
+                null,
+                callback,
+            );
+
+            elizaLogger.info('POST_TWEET Action called')
 
 
         } catch (error) {

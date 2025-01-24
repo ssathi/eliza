@@ -7,7 +7,7 @@ import type {
     State,
 } from "@elizaos/core";
 import { TweetId } from "../types";
-import { elizaLogger } from "@elizaos/core";
+import { elizaLogger, stringToUuid } from "@elizaos/core";
 import { validateTwitterConfig, TwitterConfig } from "../base/environment";
 import { ClientBase } from "../base/base";
 import { SearchMode } from "agent-twitter-client";
@@ -36,6 +36,10 @@ export const searchTweets: Action = {
 
          const twitterConfig: TwitterConfig = await validateTwitterConfig(_runtime);
 
+         const roomId = stringToUuid(
+            "twitter_generate_room-" + twitterConfig.TWITTER_USERNAME
+        );
+
          const client = new ClientBase(_runtime, twitterConfig);
          client.init();
 
@@ -50,7 +54,9 @@ export const searchTweets: Action = {
         const tweetList = recentTweets.tweets.map(tweet => ({
             text: tweet.text,
             id: tweet.id,
-            views: tweet.views
+            views: tweet.views,
+            username: tweet.username,
+            roomId: roomId
         }));
 
         elizaLogger.info('result', tweetList);

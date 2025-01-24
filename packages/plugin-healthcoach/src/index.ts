@@ -2,7 +2,7 @@ import type { Plugin } from "@elizaos/core";
 import { noneAction } from "./actions/none.ts";
 import { goalEvaluator } from "./evaluators/goal.ts";
 import { timeProvider } from "./providers/time.ts";
-import { chooseTweet, generateTweet, postTweet, searchTweets } from "./actions";
+import { chooseTweet, generateTweet, postTweet, respondToTweet, searchTweets } from "./actions";
 
 export * as actions from "./actions";
 export * as evaluators from "./evaluators";
@@ -17,6 +17,7 @@ export const healthcoachPlugin: Plugin = {
         chooseTweet,
         postTweet,
         generateTweet,
+        respondToTweet,
     ],
     evaluators: [],
     providers: [],

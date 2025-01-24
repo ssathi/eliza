@@ -31,8 +31,14 @@ export class SearchTweetsSchedular {
         elizaLogger.info("Engaging with search terms");
         try {
 
+            // SEARCH_TWEETS
+            let responseTweetList = []
+            const searchTweetCallback: HandlerCallback = async (response: Content) => {
+                responseTweetList = response.tweetList as Array<unknown>;
+                return [];
+            };
 
-            const message: Memory = {
+            const message1: Memory = {
                 content: {
                     action: 'SEARCH_TWEETS',
                     text: 'topics'
@@ -42,19 +48,66 @@ export class SearchTweetsSchedular {
                 roomId: null,
             }
 
-            const callback: HandlerCallback = async (response: Content) => {
-                elizaLogger.info('Response: ', response);
-                return [];
-            };
-
             await this.runtime.processActions(
-                message,
-                [message],
+                message1,
+                [message1],
                 null,
-                callback,
+                searchTweetCallback,
             );
 
-            elizaLogger.info('Action called')
+            // CHOOSE_TWEET
+
+            let tweetId = '';
+            const chooseTweetCallback: HandlerCallback = async (response: Content) => {
+                elizaLogger.info('Choose Tweet Response: ', JSON.stringify(response));
+                tweetId = response.tweetId as string;
+                return [];
+            }
+
+            const message2: Memory = {
+                content: {
+                    action: 'CHOOSE_TWEET',
+                    text: 'topics',
+                    tweetList: responseTweetList
+                },
+                userId: null,
+                agentId: null,
+                roomId: null,
+            }
+
+            await this.runtime.processActions(
+                message2,
+                [message2],
+                null,
+                chooseTweetCallback,
+            );
+
+            const selectedTweet = responseTweetList.filter((tweet) => tweet.id === tweetId)[0];
+
+            // RESPOND_TO_TWEET
+
+            const nothingCallback: HandlerCallback = async (response: Content) => {return []}
+
+            const message4: Memory = {
+                content: {
+                    action: 'RESPOND_TO_TWEET',
+                    text: 'topics',
+                    tweetId: tweetId,
+                    selectedTweet: selectedTweet,
+                },
+                userId: null,
+                agentId: null,
+                roomId: null,
+            }
+
+            await this.runtime.processActions(
+                message4,
+                [message4],
+                null,
+                nothingCallback,
+            )
+
+
 
         } catch (error) {
             console.error("Error engaging with search terms:", error);
