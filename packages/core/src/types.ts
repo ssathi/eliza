@@ -654,7 +654,8 @@ export enum Clients {
     SLACK = "slack",
     GITHUB = "github",
     INSTAGRAM = "instagram",
-    SIMSAI = "simsai"
+    SIMSAI = "simsai",
+    HEALTHCOACH = "healthcoach",
 }
 
 export interface IAgentConfig {

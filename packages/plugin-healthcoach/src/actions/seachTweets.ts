@@ -1,0 +1,61 @@
+import type {
+    ActionExample,
+    IAgentRuntime,
+    Memory,
+    Action,
+    HandlerCallback,
+    State,
+} from "@elizaos/core";
+import { TweetId } from "../types";
+import { elizaLogger } from "@elizaos/core";
+import { validateTwitterConfig, TwitterConfig } from "../base/environment";
+import { ClientBase } from "../base/base";
+import { SearchMode } from "agent-twitter-client";
+
+export const searchTweets: Action = {
+    name: "SEARCH_TWEETS",
+    similes: [],
+    validate: async (_runtime: IAgentRuntime, _message: Memory) => {
+        return true;
+    },
+    description:
+        "Seach twitter for given topics and return a list of tweets and ids",
+    handler: async (
+        _runtime: IAgentRuntime,
+        _message: Memory,
+        _state?: State,
+        _options?: { [key: string]: unknown },
+        _callback?: HandlerCallback,
+    ): Promise<void> => {
+
+        const searchTerm = [..._runtime.character.topics][
+            Math.floor(Math.random() * _runtime.character.topics.length)
+        ];
+
+         elizaLogger.info("Fetching search tweets for topcis", searchTerm);
+
+         const twitterConfig: TwitterConfig = await validateTwitterConfig(_runtime);
+
+         const client = new ClientBase(_runtime, twitterConfig);
+         client.init();
+
+        // TODO: we wait 5 seconds here to avoid getting rate limited on startup, but we should queue
+        await new Promise((resolve) => setTimeout(resolve, 5000));
+        const recentTweets = await client.fetchSearchTweets(
+            searchTerm,
+            20,
+            SearchMode.Top
+        );
+
+        const tweetList = recentTweets.tweets.map(tweet => ({
+            text: tweet.text,
+            id: tweet.id,
+            views: tweet.views
+        }));
+
+        elizaLogger.info('result', tweetList);
+
+        _callback({text: 'searchTweetsResponse', tweetList})
+    },
+    examples: [] as ActionExample[][],
+} as Action;

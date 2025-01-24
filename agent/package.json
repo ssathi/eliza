@@ -85,6 +85,8 @@
         "@elizaos/plugin-near": "workspace:*",
         "@elizaos/plugin-zksync-era": "workspace:*",
         "@elizaos/plugin-twitter": "workspace:*",
+        "@elizaos/plugin-healthcoach": "workspace:*",
+        "@elizaos/client-healthcoach": "workspace:*",
         "@elizaos/plugin-primus": "workspace:*",
         "@elizaos/plugin-cronoszkevm": "workspace:*",
         "@elizaos/plugin-cronos": "workspace:*",
