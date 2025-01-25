@@ -30,7 +30,7 @@ const twitterPostTemplate = `
 
 # Task: Choose a tweet that suits your expert area
 choose one tweet id. only id no text.
-
+priotize latest tweet {eg. timestamp:1737709547}
 `
 
 export const chooseTweet: Action = {
