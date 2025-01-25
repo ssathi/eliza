@@ -82,7 +82,16 @@ export class SearchTweetsSchedular {
                 chooseTweetCallback,
             );
 
-            const selectedTweet = responseTweetList.filter((tweet) => tweet.id === tweetId)[0];
+            const twoDaysAgoTimestamp = Math.floor(new Date().setDate(new Date().getDate() - 2) / 1000);  // Timestamp for 2 days ago
+
+
+            const selectedTweet = responseTweetList.filter((tweet) => tweet.id === tweetId && tweet.timestamp >= twoDaysAgoTimestamp)[0];
+
+            // if no tweet, skip it
+            if (!selectedTweet) {
+                elizaLogger.info('Skipping RESPOND_TO_TWEET');
+                return;
+            }
 
             // RESPOND_TO_TWEET
 

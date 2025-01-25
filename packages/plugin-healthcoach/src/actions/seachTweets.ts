@@ -6,7 +6,6 @@ import type {
     HandlerCallback,
     State,
 } from "@elizaos/core";
-import { TweetId } from "../types";
 import { elizaLogger, stringToUuid } from "@elizaos/core";
 import { validateTwitterConfig, TwitterConfig } from "../base/environment";
 import { ClientBase } from "../base/base";
@@ -48,7 +47,7 @@ export const searchTweets: Action = {
         const recentTweets = await client.fetchSearchTweets(
             searchTerm,
             20,
-            SearchMode.Top
+            SearchMode.Latest
         );
 
         const tweetList = recentTweets.tweets.map(tweet => ({
@@ -56,10 +55,9 @@ export const searchTweets: Action = {
             id: tweet.id,
             views: tweet.views,
             username: tweet.username,
-            roomId: roomId
+            roomId: roomId,
+            timestamp: tweet.timestamp as number
         }));
-
-        elizaLogger.info('result', tweetList);
 
         _callback({text: 'searchTweetsResponse', tweetList})
     },
