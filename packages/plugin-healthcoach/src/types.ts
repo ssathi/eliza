@@ -13,3 +13,12 @@ export interface SelectedTweet {
     views: number;
     roomId: UUID;
 }
+
+export interface PromptResponse {
+    tweet: string;
+    topic: string;
+    theme: string;
+    templateId: string;
+    structure: string;
+    rationale: string;
+}

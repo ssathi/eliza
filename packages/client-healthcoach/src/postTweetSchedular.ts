@@ -18,7 +18,7 @@ export class PostTweetsSchedular {
 
     private engageWithSearchTermsLoop() {
         this.engageWithSearchTerms().then();
-        const randomMinutes = Math.floor(Math.random() * (120 - 60 + 1)) + 60;
+        const randomMinutes = Math.floor(Math.random() * (20 - 10 + 1)) + 10;
         elizaLogger.info(
             `Next twitter search scheduled in ${randomMinutes} minute`
         );
